@@ -19,7 +19,6 @@ struct TreeCore {
 
     // constructors and destructors
     TreeCore(int __value) : value(__value) {}
-    TreeCore(int __value, T_Node* __parent) : value(__value), parent(__parent) {}
     virtual ~TreeCore(){}
 
     T_Node* __this_as_t_node() { return dynamic_cast<T_Node*>(this); }
@@ -43,7 +42,7 @@ struct TreeCore {
         bool __is_arm_right(T_Node* __node_to_check) { return __node_to_check == __get_arm_right(); }
         bool __is_arm_right_exists() { return !__is_arm_right(nullptr); }
 
-        bool __is_parent(T_Node* __node_to_check) { return __node_to_check == __get_patent(); }
+        bool __is_parent(T_Node* __node_to_check) { return __node_to_check == __get_parent(); }
         bool __is_parent_exists() { return !__is_parent(nullptr); }
 
         // arm checks extend
@@ -64,27 +63,33 @@ struct TreeCore {
 
     protected: // set parent
         void __set_parent(T_Node* __new_parent_node) {
-            // old parent remove correct arm
+
+            // old parent remove this (arm)
             if (__is_parent_exists()){
                 if (__get_parent()->__is_arm_left(__this_as_t_node()))
                     __get_parent()->armLeft = nullptr;
                 else if (__get_parent()->__is_arm_right(__this_as_t_node()))
                     __get_parent()->armRight = nullptr;
-                else throw "Set Parent Error: old parent";
+                else throw "Set Parent Error in old parent";
             }
 
-            // . NP correct arm set parent null
-            if (__new_parent_node->__is_value_left(__get_value())) {
-                if (__new_parent_node->__is_arm_left_exists())
-                    __new_parent_node->__get_arm_left()->parent = nullptr;
-                __new_parent_node->armLeft = __this_as_t_node();
+            // new parent set correct arm
+            if (__new_parent_node != nullptr) {
+                if (__new_parent_node->__is_value_left(__get_value())) {
+                    if (__new_parent_node->__is_arm_left_exists())
+                        __new_parent_node->__get_arm_left()->__set_parent(nullptr);
+                    __new_parent_node->armLeft = __this_as_t_node();
+                }
+                else if (__new_parent_node->__is_value_right(__get_value())) {
+                    if (__new_parent_node->__is_arm_right_exists())
+                        __new_parent_node->__get_arm_right()->__set_parent(nullptr);
+                    __new_parent_node->armRight = __this_as_t_node();
+                }
+                else throw "Set Parent Error in new parent";
             }
-            else if (__new_parent_node->__is_value_right(__get_value())) {
-                if (__new_parent_node->__is_arm_right_exists())
-                    __new_parent_node->__get_arm_right()->parent = nullptr;
-                __new_parent_node->armRight = __this_as_t_node();
-            }
-            else throw "Set Parent Error: new parent";
+
+            // set parent
+            parent = __new_parent_node;
         }
 
     public:
@@ -96,13 +101,13 @@ struct TreeCore {
                 if (__is_arm_left_exists()) 
                     __get_arm_left()->AddNode(__value);
                 else 
-                    (new T_Node(__value, __this_as_t_node()))->__set_parent(__this_as_t_node());
+                    (new T_Node(__value))->__set_parent(__this_as_t_node());
             }
             else if (__is_value_right(__value)) {
                 if (__is_arm_right_exists()) 
                     __get_arm_right()->AddNode(__value);
                 else 
-                    (new T_Node(__value, __this_as_t_node()))->__set_parent(__this_as_t_node());
+                    (new T_Node(__value))->__set_parent(__this_as_t_node());
             }
         }
 
@@ -126,21 +131,12 @@ struct TreeCore {
 
         void DelTree() {
             if (__is_arm_left_exists()) {
-                armLeft->parent = nullptr;
                 armLeft->DelTree();
             }
             if (__is_arm_right_exists()) {
-                armRight->parent = nullptr;
                 armRight->DelTree();
             }
-            if (parent != nullptr) {
-                if (parent->armLeft == this)
-                    parent->armLeft = nullptr;
-                if (parent->armRight == this)
-                    parent->armRight = nullptr;
-                parent->DelTree();
-            }
-            delete this;
+            DelNode();
         }
 
         void DelNode() {
@@ -189,7 +185,7 @@ struct TreeCore {
         }
 
         std::string GetFullString() {
-            std::string returnString = ToString();
+            std::string returnString = __this_as_t_node()->ToString();
             if (__is_arm_left_exists()) 
                 returnString += "\n├" + std::regex_replace(__get_arm_left()->GetFullString(), std::regex("\n"), "\n│");
             if (__is_arm_right_exists()) 
