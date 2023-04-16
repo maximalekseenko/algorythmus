@@ -9,7 +9,8 @@ if [ ! -d $BUILD_DIR ]; then
 fi
 
 # build
-g++ -std=c++20 -o $BUILD_DIR/build $SRC_DIR/*.cpp -fsanitize=address -fdiagnostics-color=always
+g++ -std=c++20 -o $BUILD_DIR/build $SRC_DIR/T$1-2.cpp -fsanitize=address -fdiagnostics-color=always
 
 # run
-(cd $BUILD_DIR; ./build)
+$BUILD_DIR/build
+rm -r $BUILD_DIR/build

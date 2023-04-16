@@ -7,8 +7,8 @@ int main() {
     char task = 'A';
     int num = 0;
 
-    std::cin >> num;
-    TreeNode root(Random::FromRange(0, 100));
+    /* std::cin >> num; */ num = 20;
+    Tree root(Random::FromRange(0, 100));
     for (int i = 0; i < num; i ++) root.AddNode(Random::FromRange(0, 100));
 
     while (task != ' '){
@@ -29,11 +29,11 @@ int main() {
                 root.PrintTree();
                 break;
             case '3': case 'c':
-                std::cout << root.DepthTree();
+                std::cout << root.DepthTree() << std::endl;
                 break;
             case '4': case 'd':
                 std::cin >> num;
-                std::cout << root.SearchNode(num)->value;
+                std::cout << root.SearchNode(num)->__get_value() << std::endl;
                 break;
             case '5': case 'e':
                 std::cin >> num;
