@@ -9,7 +9,7 @@ if [ ! -d $BUILD_DIR ]; then
 fi
 
 # build
-g++ -std=c++20 -o $BUILD_DIR/build $SRC_DIR/T$1-2.cpp -fsanitize=address -fdiagnostics-color=always
+g++ -std=c++20 -o $BUILD_DIR/build $SRC_DIR/main-$1.cpp -fsanitize=address -fdiagnostics-color=always
 
 # run
 $BUILD_DIR/build
