@@ -5,9 +5,9 @@
 
 int main() {
     char task = 'A';
-    int num = 0;
+    int num = 20;
 
-    std::cin >> num;
+    // std::cin >> num;
     Tree root(Random::FromRange(0, 100));
     for (int i = 0; i < num; i ++) root.AddNode(Random::FromRange(0, 100));
 
