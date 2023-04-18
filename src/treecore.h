@@ -18,7 +18,7 @@ struct TreeCore {
     public:
 
     // constructors and destructors
-    TreeCore(int __value) : value(__value) {}
+    TreeCore(int __value) : value(__value), armLeft(nullptr), armRight(nullptr), parent(nullptr) {}
     virtual ~TreeCore(){}
 
     T_Node* __this_as_t_node() { return dynamic_cast<T_Node*>(this); }
@@ -85,7 +85,7 @@ struct TreeCore {
                         __new_parent_node->__get_arm_right()->__set_parent(nullptr);
                     __new_parent_node->armRight = __this_as_t_node();
                 }
-                else throw "Set Parent Error in new parent";
+                //else throw "Set Parent Error in new parent";
             }
 
             // set parent
@@ -118,6 +118,10 @@ struct TreeCore {
             int armLeftDepth = __is_arm_left_exists() ? armLeft->DepthTree() : 0;
             int armRightDepth = __is_arm_right_exists() ? armRight->DepthTree() : 0;
             return 1 + (armLeftDepth > armRightDepth ? armLeftDepth : armRightDepth);
+        }
+
+        static int DepthTree(T_Node* __arm) {
+            return __arm != nullptr ? __arm->DepthTree() : 0;
         }
 
         T_Node* SearchNode(int __value) {
