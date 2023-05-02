@@ -5,23 +5,63 @@
 #include <regex>
 
 
-template<typename T_Node>
-struct TreeBase {
+/**
+ * @brief
+ * public:
+ * using TreeBase<T_Node>::TreeBase;
+ * using TreeBase<T_Node>::__get_arm_left;
+ * using TreeBase<T_Node>::__get_arm_right;
+ * using TreeBase<T_Node>::__get_parent;
+ * using TreeBase<T_Node>::__get_value;
+ * 
+ * protected:
+ * using TreeBase<T_Node>::__this_as_t_node;
+ * using TreeBase<T_Node>::__is_root;
+ * using TreeBase<T_Node>::__is_leaf;
+ * using TreeBase<T_Node>::__is_arm_left;
+ * using TreeBase<T_Node>::__is_arm_left_exists;
+ * using TreeBase<T_Node>::__is_arm_right;
+ * using TreeBase<T_Node>::__is_arm_right_exists;
+ * using TreeBase<T_Node>::__is_parent;
+ * using TreeBase<T_Node>::__is_parent_exists;
+ * using TreeBase<T_Node>::__is_arm;
+ * using TreeBase<T_Node>::__is_arm_any_exists;
+ * using TreeBase<T_Node>::__is_arm_all_exists;
+ * using TreeBase<T_Node>::__is_value_left;
+ * using TreeBase<T_Node>::__is_value_right;
+ * using TreeBase<T_Node>::__is_value_this;
+ * using TreeBase<T_Node>::__set_parent;
+ * 
+ * public:
+ * using TreeBase<T_Node>::AddNode;
+ * using TreeBase<T_Node>::PrintTree;
+ * using TreeBase<T_Node>::DepthTree;
+ * using TreeBase<T_Node>::DepthTree;
+ * using TreeBase<T_Node>::SearchNode;
+ * using TreeBase<T_Node>::DelTree;
+ * using TreeBase<T_Node>::DelNode;
+ * using TreeBase<T_Node>::GetFullString;
+ * using TreeBase<T_Node>::Update;
+ * using TreeBase<T_Node>::ToString;
+ * 
+ * @tparam T_Node 
+ */
+template<class T_Node>
+class TreeBase {
 
     private:
 
-    int value;
-    T_Node* armLeft  = nullptr;
-    T_Node* armRight = nullptr;
-    T_Node* parent   = nullptr;
+        int value;
+        T_Node* armLeft  = nullptr;
+        T_Node* armRight = nullptr;
+        T_Node* parent   = nullptr;
 
     public:
 
-    // constructors and destructors
-    TreeBase(int __value) : value(__value), armLeft(nullptr), armRight(nullptr), parent(nullptr) {}
-    virtual ~TreeBase(){}
+        // constructors and destructors
+        TreeBase(int __value) : value(__value), armLeft(nullptr), armRight(nullptr), parent(nullptr) {}
+        virtual ~TreeBase(){}
 
-    T_Node* __this_as_t_node() { return dynamic_cast<T_Node*>(this); }
 
     public: // getters
         T_Node* __get_arm_left() { return armLeft; }
@@ -30,6 +70,7 @@ struct TreeBase {
         int __get_value() { return value; }
     
     public: // common
+        T_Node* __this_as_t_node() { return dynamic_cast<T_Node*>(this); }
         bool __is_root() { return !__is_parent_exists(); }
         bool __is_leaf() { return !__is_arm_any_exists(); }
 
@@ -203,10 +244,5 @@ struct TreeBase {
         void Update(){}
         std::string ToString(){ return std::to_string(__get_value()); }
 
-};
-
-
-struct Tree : public TreeBase<Tree> { 
-    using TreeBase::TreeBase;
-};
+}; class Tree : public TreeBase<Tree> { using TreeBase::TreeBase; };
 
